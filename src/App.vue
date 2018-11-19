@@ -2,16 +2,19 @@
   <div id="app">
     <!-- <img src="./assets/logo.png">
     <HelloWorld/> -->
+    <vux />
   </div>
 </template>
 
 <script>
 // import HelloWorld from './components/HelloWorld'
+import Vux from './components/vux'
 
 export default {
   name: 'App',
   components: {
     // HelloWorld
+    Vux
   }
 }
 </script>
