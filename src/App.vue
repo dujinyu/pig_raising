@@ -2,7 +2,8 @@
   <div id="app">
     <!-- <img src="./assets/logo.png">
     <HelloWorld/> -->
-    <vux />
+    <router-view></router-view>
+    <!-- <vux /> -->
   </div>
 </template>
 
