@@ -11,7 +11,7 @@
             </x-input>
         </group>
         <group>
-            <x-input title="验证码" class="weui-vcode" v-model="SMSCode">
+            <x-input title="验证码" class="weui-vcode" v-model="SMSCode" placeholder="请输入验证码">
                 <x-button slot="right" :disabled="buttonDisabled" :type="buttonType" mini @click.native="requestSMSCode" :text="buttonText"></x-button>
             </x-input>
         </group>
@@ -31,7 +31,7 @@ export default {
             phoneNumber: "",
             SMSCode: "",
             buttonText: "发送验证码",
-            countDownTime: 10,
+            countDownTime: 60,
             buttonType: "primary",
             buttonDisabled: false
         }
@@ -43,7 +43,7 @@ export default {
             console.log("requestSMSCode")
             //计时禁用发送验证码功能
             this.buttonDisabled = true;
-            this.buttonType = "default";~
+            this.buttonType = "default";
             this.countDown();
             // return;
         },
@@ -52,7 +52,7 @@ export default {
                 this.buttonDisabled = false;
                 this.buttonType = "primary";
                 this.buttonText = "发送验证码";
-                this.countDownTime = 10;
+                this.countDownTime = 60;
             } else {
                 this.buttonText = this.countDownTime.toString() + "秒后重新发送";
                 //console.log(this.SMSCode);

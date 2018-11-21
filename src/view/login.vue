@@ -10,13 +10,20 @@
         <login-with-phone-number v-if="!flag"></login-with-phone-number>
         <!-- 使用router-view总感觉有一定的问题，至少URL不是我想要的 -->
         <!-- <router-view></router-view> -->
-        <cell class="remind">
+        <!-- <group>
+            <cell class="remind">
+                <span class="register" @click="goToRegister">注册账号</span>
+                <span class="forget-password" @click="goToForgetPassword">忘记密码？</span>
+            </cell>
+        </group> -->
+        <div class="remind">
             <span class="register" @click="goToRegister">注册账号</span>
             <span class="forget-password" @click="goToForgetPassword">忘记密码？</span>
-        </cell>
+        </div>
+
         <box gap="0px 10px 0px 10px">
             <group>
-                <x-button type="primary">登录</x-button>
+                <x-button type="primary" @click.native="login">登录</x-button>
             </group>
         </box>
     </div>
@@ -42,6 +49,9 @@ export default {
         }
     },
     methods: {
+        login() {
+
+        },
         selectedLoginWithUsername() {
             this.flag = true;
             //this.$router.push({path: "/login/username"})
@@ -70,6 +80,11 @@ export default {
 </script>
 
 <style>
+    .remind {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+    }
     .register, .forget-password {
         color: blue;
     }

@@ -5,9 +5,10 @@ Vue.use(Router)
 // 页面引入
 import Login from "@/view/login"
 import Register from "@/view/register"
-import LoginWithUsername from "@/view/loginSubpage/loginWithUsername"
-import LoginWithPhoneNumber from '../view/loginSubpage/loginWithPhoneNumber.vue'
-import ForgetPassword from '../view/forgetPassword/forgetPassword.vue'
+// import LoginWithUsername from "@/view/loginSubpage/loginWithUsername"
+// import LoginWithPhoneNumber from '../view/loginSubpage/loginWithPhoneNumber.vue'
+import ForgetPassword from '../view/forgetPassword/forgetPassword'
+import Home from '../view/home'
 
 const router = new Router({
     routes: [
@@ -43,6 +44,11 @@ const router = new Router({
             path: "/forgetpassword",
             name: "ForgetPassword",
             component: ForgetPassword
+        },
+        {
+            path: "/home",
+            name: "Home",
+            component: Home
         }
     ]
 })
