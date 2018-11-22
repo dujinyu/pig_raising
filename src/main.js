@@ -12,7 +12,7 @@ import FastClick from 'fastclick'
 FastClick.attach(document.body)
 
 //全局挂载axios，不用挨个引入
-import Axios from 'axios'
+import Axios from '@/common/axios'
 Vue.prototype.$axios = Axios
 
 //路由router
