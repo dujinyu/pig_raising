@@ -1,18 +1,27 @@
 <template>
     <div>
         <x-header>账号注册</x-header>
-        <group title="请填入手机号">
+        <group>
             <x-input
-                title="手机号码"
+                title="手机号"
                 name="mobile"
-                placeholder="请输入手机号码"
-                v-model="phoneNumber"
+                placeholder="请输入手机号"
+                v-model="userInfo.phoneNumber"
                 keyboard="number"
                 is-type="china-mobile">
             </x-input>
         </group>
         <group>
-            <x-input title="验证码" class="weui-vcode" v-model="SMSCode" placeholder="请输入验证码">
+            <x-input title="用户名" placeholder="请输入用户名" v-model="userInfo.username"></x-input>
+        </group>
+        <group>
+            <x-input title="密码" name="password" placeholder="请输入密码" :type="passwordType" v-model="userInfo.password">
+                <!-- <img slot="right" :src="iconSrc" style="width: 16px; height:16px;" alt=""> -->
+                <span slot="right" @click="showAndHidPassword">{{ checkPassword }}</span>
+            </x-input>
+        </group>
+        <group>
+            <x-input title="验证码" class="weui-vcode" v-model="userInfo.SMSCode" placeholder="请输入验证码">
                 <x-button slot="right" :disabled="buttonDisabled" :type="buttonType" mini @click.native="requestSMSCode" :text="buttonText"></x-button>
             </x-input>
         </group>
@@ -34,12 +43,19 @@ export default {
     props: {},
     data() {
         return {
-            phoneNumber: "",
+            userInfo: {
+                phoneNumber: "",
+                username: "",
+                password: "",
+                SMSCode: "",
+            },
             buttonDisabled: false,
             buttonType: "primary",
             buttonText: "发送验证码",
             countDownTime: 60,
-            SMSCode: ""
+            flag: true,
+            passwordType: "password",
+            checkPassword: "查看密码"
 
         }
     },
@@ -69,6 +85,17 @@ export default {
                 this.countDownTime--;
             }
             // return;
+        },
+        showAndHidPassword() {
+            if (this.flag) {
+                this.passwordType = "text";
+                this.checkPassword = "隐藏密码";
+                this.flag = false;
+            } else {
+                this.passwordType = "password";
+                this.checkPassword = "查看密码";
+                this.flag = true;
+            }
         }
     },
     created() {},
