@@ -6,8 +6,8 @@
                 <button-tab-item @on-item-click="selectedLoginWithPhoneNumber">手机号登录</button-tab-item>
             </button-tab>
         </box>
-        <login-with-username v-if="flag"></login-with-username>
-        <login-with-phone-number v-if="!flag"></login-with-phone-number>
+        <login-with-username v-if="flag" @usernameAndPassword="getUsernameAndPassword"></login-with-username>
+        <login-with-phone-number v-if="!flag" @phoneNumberAndSMSCode="getPhoneNumberAndSMSCode"></login-with-phone-number>
         <!-- 使用router-view总感觉有一定的问题，至少URL不是我想要的 -->
         <!-- <router-view></router-view> -->
         <!-- <group>
@@ -45,12 +45,27 @@ export default {
             index: 0,
             LoginWithUsernameStyle: "",
             LoginWithPhoneNumberStyle: "display: none;",
-            flag: true
+            flag: true,
+            userInfo: {
+                phoneNumber: "",
+                username: "",
+                password: "",
+                SMSCode: ""
+            }
         }
     },
     methods: {
         login() {
-
+            console.log("登录！")
+            console.log(this.userInfo);
+        },
+        getUsernameAndPassword(data) {
+            this.userInfo.username = data.username;
+            this.userInfo.password = data.password;
+        },
+        getPhoneNumberAndSMSCode(data) {
+            this.userInfo.phoneNumber = data.phoneNumber.split(" ").join("");
+            this.userInfo.SMSCode = data.SMSCode;
         },
         selectedLoginWithUsername() {
             this.flag = true;

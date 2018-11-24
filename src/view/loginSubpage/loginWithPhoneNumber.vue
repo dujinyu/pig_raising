@@ -2,16 +2,19 @@
     <div>
         <group>
             <x-input
-                title="手机号码"
+                title="手机号"
+                ref="mobile"
                 name="mobile"
-                placeholder="请输入手机号码"
-                v-model="phoneNumber"
+                placeholder="请输入手机号"
+                v-model="userInfo.phoneNumber"
                 keyboard="number"
+                mask="999 9999 9999"
+                :max="13"
                 is-type="china-mobile">
             </x-input>
         </group>
         <group>
-            <x-input title="验证码" class="weui-vcode" v-model="SMSCode" placeholder="请输入验证码">
+            <x-input title="验证码" class="weui-vcode" v-model="userInfo.SMSCode" placeholder="请输入验证码">
                 <x-button slot="right" :disabled="buttonDisabled" :type="buttonType" mini @click.native="requestSMSCode" :text="buttonText"></x-button>
             </x-input>
         </group>
@@ -19,28 +22,71 @@
 </template>
 
 <script>
-import { XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem } from 'vux'
+import { XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, AlertModule } from 'vux'
 export default {
     name: "PhoneNumber",
     components: {
-        XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem
+        XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, AlertModule
     },
     props: {},
     data() {
         return {
-            phoneNumber: "",
-            SMSCode: "",
+            userInfo: {
+                phoneNumber: "",
+                SMSCode: ""
+            },
             buttonText: "发送验证码",
             countDownTime: 60,
-            buttonType: "primary",
-            buttonDisabled: false
+            buttonType: "default",
+            buttonDisabled: true
         }
     },
-    watch:{},
+    watch:{
+        "userInfo.phoneNumber": function(newV, oldV) {
+            //console.log(newV);
+            if (this.$refs.mobile.valid) {
+                this.buttonDisabled = false;
+                this.buttonType = "primary";
+            } else {
+                this.buttonDisabled = true;
+                this.buttonType = "default";
+            }
+            this.$emit("phoneNumberAndSMSCode", this.userInfo);
+        },
+        "userInfo.SMSCode": function(newV, oldV) {
+            this.$emit("phoneNumberAndSMSCode", this.userInfo);
+        }
+    },
     computed: {},
     methods: {
         requestSMSCode() {
             console.log("requestSMSCode")
+            if (this.$refs.mobile.valid) {
+                this.$axios.get("http://192.168.1.109:8889/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join(""))
+                .then((res) => {
+                    console.log(res.data);
+                    //this.userInfo.SMSCode = res.data.SMSCode;
+                    if (res.data) {
+                        AlertModule.show({
+                            title: "提示",
+                            content: "验证码请求成功！"
+                        })
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    AlertModule.show({
+                            title: "提示",
+                            content: "验证码请求失败，请输入正确的手机号！"
+                        })
+                })
+            } else {
+                AlertModule.show({
+                    title: "提示",
+                    content: "手机号格式不正确，请重新输入！"
+                })
+            }
+
             //计时禁用发送验证码功能
             this.buttonDisabled = true;
             this.buttonType = "default";
@@ -49,9 +95,11 @@ export default {
         },
         countDown() {
             if ( this.countDownTime < 0 ) {
-                this.buttonDisabled = false;
-                this.buttonType = "primary";
                 this.buttonText = "发送验证码";
+                if (this.$refs.mobile.valid) {
+                    this.buttonDisabled = false;
+                    this.buttonType = "primary";
+                }
                 this.countDownTime = 60;
             } else {
                 this.buttonText = this.countDownTime.toString() + "秒后重新发送";

@@ -87,8 +87,8 @@ export default {
                 }
             },
             confirmPassword: "",
-            buttonDisabled: false,
-            buttonType: "primary",
+            buttonDisabled: true,
+            buttonType: "default",
             buttonText: "发送验证码",
             countDownTime: 60,
             flag: true,  //用于标志超看密码
@@ -100,7 +100,19 @@ export default {
 
         }
     },
-    watch:{},
+    watch: {
+        // 侦听电话号码的变化，以便使能“发送验证码”按钮
+        "userInfo.phoneNumber": function(newV, oldV) {
+            //console.log(newV);
+            if (this.$refs.mobile.valid) {
+                this.buttonDisabled = false;
+                this.buttonType = "primary";
+            } else {
+                this.buttonDisabled = true;
+                this.buttonType = "default";
+            }
+        }
+    },
     computed: {},
     methods: {
         register() {
@@ -202,8 +214,34 @@ export default {
             }
             return true;
         },
+        //请求验证码
         requestSMSCode() {
             console.log("requestSMSCode")
+            if (this.$refs.mobile.valid) {
+                this.$axios.get("http://192.168.1.109:8889/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join(""))
+                .then((res) => {
+                    console.log(res.data);
+                    //this.userInfo.SMSCode = res.data.SMSCode;
+                    if (res.data) {
+                        AlertModule.show({
+                            title: "提示",
+                            content: "验证码请求成功！"
+                        })
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    AlertModule.show({
+                            title: "提示",
+                            content: "验证码请求失败，请输入正确的手机号！"
+                        })
+                })
+            } else {
+                AlertModule.show({
+                    title: "提示",
+                    content: "手机号格式不正确，请重新输入！"
+                })
+            }
             //计时禁用发送验证码功能
             this.buttonDisabled = true;
             this.buttonType = "default";
@@ -212,9 +250,11 @@ export default {
         },
         countDown() {
             if ( this.countDownTime < 0 ) {
-                this.buttonDisabled = false;
-                this.buttonType = "primary";
                 this.buttonText = "发送验证码";
+                if (this.$refs.mobile.valid) {
+                    this.buttonDisabled = false;
+                    this.buttonType = "primary";
+                }
                 this.countDownTime = 60;
             } else {
                 this.buttonText = this.countDownTime.toString() + "秒后重新发送";
@@ -258,8 +298,5 @@ export default {
 <style scoped>
 
 </style>
-// <style lang="less" scoped>
-//     @header-background-color: black;
-// </style>
 
 
