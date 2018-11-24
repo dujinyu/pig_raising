@@ -10,11 +10,12 @@
                 keyboard="number"
                 mask="999 9999 9999"
                 :max="13"
-                is-type="china-mobile">
+                is-type="china-mobile"
+                required>
             </x-input>
         </group>
         <group>
-            <x-input title="验证码" class="weui-vcode" v-model="userInfo.SMSCode" placeholder="请输入验证码">
+            <x-input title="验证码" class="weui-vcode" v-model="userInfo.SMSCode" placeholder="请输入验证码" :max="6">
                 <x-button slot="right" :disabled="buttonDisabled" :type="buttonType" mini @click.native="requestSMSCode" :text="buttonText"></x-button>
             </x-input>
         </group>
@@ -62,7 +63,7 @@ export default {
         requestSMSCode() {
             console.log("requestSMSCode")
             if (this.$refs.mobile.valid) {
-                this.$axios.get("http://192.168.1.109:8889/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join(""))
+                this.$axios.get("/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join(""))
                 .then((res) => {
                     console.log(res.data);
                     //this.userInfo.SMSCode = res.data.SMSCode;

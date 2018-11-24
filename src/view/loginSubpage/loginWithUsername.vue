@@ -1,7 +1,17 @@
 <template>
     <div>
         <group>
-            <x-input title="用户名" name="username" placeholder="请输入账号" v-model="userInfo.username" required></x-input>
+            <x-input title="手机号"
+                ref="mobile"
+                name="mobile"
+                placeholder="请输入手机号"
+                v-model="userInfo.phoneNumber"
+                :max="13"
+                keyboard="number"
+                mask="999 9999 9999"
+                is-type="china-mobile"
+                required>
+            </x-input>
         </group>
         <group>
             <x-input title="密码" name="password" placeholder="请输入密码" :type="passwordType" v-model="userInfo.password">
@@ -24,7 +34,7 @@ export default {
     data() {
         return {
             userInfo: {
-                username: "",
+                phoneNumber: "",
                 password: ""
             },
             flag: true,
@@ -41,11 +51,12 @@ export default {
         }
     },
     watch: {
-        "userInfo.username": function(newV, oldV) {
-            this.$emit("usernameAndPassword", this.userInfo);
+        "userInfo.phoneNumber": function(newV, oldV) {
+            this.$emit("phoneNumberAndPassword", this.userInfo);
+            this.$emit("validPhoneNumber", this.$refs.mobile.valid);
         },
         "userInfo.password": function(newV, oldV) {
-            this.$emit("usernameAndPassword", this.userInfo);
+            this.$emit("phoneNumberAndPassword", this.userInfo);
         }
 
     },

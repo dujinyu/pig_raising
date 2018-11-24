@@ -2,11 +2,11 @@
     <div>
         <box gap="10px 10px 0px 10px">
             <button-tab v-model="index">
-                <button-tab-item selected @on-item-click="selectedLoginWithUsername">账号密码登录</button-tab-item>
-                <button-tab-item @on-item-click="selectedLoginWithPhoneNumber">手机号登录</button-tab-item>
+                <button-tab-item selected @on-item-click="selectedLoginWithUsername">手机号密码登录</button-tab-item>
+                <button-tab-item @on-item-click="selectedLoginWithPhoneNumber">手机号验证码登录</button-tab-item>
             </button-tab>
         </box>
-        <login-with-username v-if="flag" @usernameAndPassword="getUsernameAndPassword"></login-with-username>
+        <login-with-username v-if="flag" @phoneNumberAndPassword="getPhoneNumberAndPassword" @validPhoneNumber="validPhoneNumberFlag"></login-with-username>
         <login-with-phone-number v-if="!flag" @phoneNumberAndSMSCode="getPhoneNumberAndSMSCode"></login-with-phone-number>
         <!-- 使用router-view总感觉有一定的问题，至少URL不是我想要的 -->
         <!-- <router-view></router-view> -->
@@ -30,13 +30,13 @@
 </template>
 
 <script>
-import { Box, XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, Flexbox, FlexboxItem } from 'vux'
+import { Box, XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, Flexbox, FlexboxItem, AlertModule } from 'vux'
 import LoginWithPhoneNumber from '../view/loginSubpage/loginWithPhoneNumber.vue'
 import LoginWithUsername from "@/view/loginSubpage/loginWithUsername"
 export default {
     name: "Login",
     components: {
-       Box, XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, Flexbox, FlexboxItem,
+       Box, XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, Flexbox, FlexboxItem, AlertModule,
        LoginWithPhoneNumber,
        LoginWithUsername
     },
@@ -48,7 +48,18 @@ export default {
             flag: true,
             userInfo: {
                 phoneNumber: "",
-                username: "",
+                // username: "",
+                password: "",
+                SMSCode: ""
+            },
+            validPhoneNumberFlag1: true
+        }
+    },
+    watch: {
+        flag: function(newV, oldV) {
+            this.userInfo = {
+                phoneNumber: "",
+                // username: "",
                 password: "",
                 SMSCode: ""
             }
@@ -56,11 +67,39 @@ export default {
     },
     methods: {
         login() {
+            if (this.validPhoneNumberFlag1 == false) {
+                AlertModule.show({
+                    title: "提示",
+                    content: "手机号输入不正确！"
+                })
+            } else {
+                console.log("请求登录！")
+                // 这一段是需要的
+                // this.$axios.post("/purchase/login", {
+                //     userId: this.userInfo.phoneNumber,
+                //     passwd: this.userInfo.password,
+                //     VerificationCode: this.userInfo.SMSCode
+                // })
+                // .then(res => {
+                //     if (res.data.status === "success") {
+                //         console.log("登录成功!")
+                //         this.$router.push({path: "/home"})
+                //     }
+                // })
+                // .catch(err => {
+                //     console.log(err)
+                // })
+            }
             console.log("登录！")
             console.log(this.userInfo);
         },
-        getUsernameAndPassword(data) {
-            this.userInfo.username = data.username;
+        validPhoneNumberFlag(data) {
+            this.validPhoneNumberFlag1 = data;
+        },
+        getPhoneNumberAndPassword(data) {
+            //console.log("getPhoneNumberAndPassword")
+            //console.log(data)
+            this.userInfo.phoneNumber = data.phoneNumber.split(" ").join("");
             this.userInfo.password = data.password;
         },
         getPhoneNumberAndSMSCode(data) {
