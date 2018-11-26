@@ -20,6 +20,13 @@
         <group>
             <x-input title="用户名" ref="username" placeholder="请输入用户名" v-model="userInfo.username" :is-type="validUsername" required></x-input>
         </group>
+        <!-- 角色选择 -->
+        <!-- <group>
+            <radio :options="userAuthChoose" @on-change="change" :value="userAuthChoose[0]"></radio>
+        </group> -->
+        <group>
+            <selector placeholder="请选择身份" v-model="userInfo.userAuth" title="身份选择" :options="AuthList"></selector>
+        </group>
         <!-- 输入密码 -->
         <group>
             <x-input title="密码" name="password" ref="password" placeholder="请输入密码"
@@ -46,21 +53,15 @@
                 <x-button type="primary" @click.native="register">注册</x-button>
             </group>
         </box>
-        <!-- <div v-transfer-dom>
-            <alert v-model="show2" :title="$t('Congratulations')" :content="$t('Your Message is sent successfully~')"></alert>
-        </div> -->
     </div>
 </template>
 
 <script>
-import { XHeader, Group, XInput, XButton, Box, AlertModule } from 'vux'
+import { XHeader, Group, XInput, XButton, Box, AlertModule, Selector } from 'vux'
 export default {
     name: "Register",
-    // directives: {
-    //     TransferDom
-    // },
     components: {
-        XHeader, Group, XInput, XButton, Box, AlertModule
+        XHeader, Group, XInput, XButton, Box, AlertModule, Selector
     },
     props: {},
     data() {
@@ -70,7 +71,9 @@ export default {
                 username: "",
                 password: "",
                 SMSCode: "",
+                userAuth: ""
             },
+            AuthList: [ {key: "P", value: "买家"}, {key: "M", value: "卖家"} ],
             // ok: true,
             validPassword: function (value) {
                 var isPassword = /^(\w){6,20}$/;
@@ -80,10 +83,10 @@ export default {
                 }
             },
             validUsername: function (value) {
-                var isUserName = /^[\u4e00-\u9fa5]{2}([\u4e00-\u9fa5]|[a-zA-Z0-9]|[_]){0,8}$/;
+                var isUserName = /^[\u4e00-\u9fa5]{2}([\u4e00-\u9fa5]){0,3}$/;
                 return {
                     valid: isUserName.test(value),
-                    msg: "用户名格式错误，用户名长度必须大于等于2小于等于10，前两位必须为中文，其他位只能是中文、数字、字母和下划线，区分大小写！"
+                    msg: "用户名格式错误，用户名长度必须大于等于2小于等于5，只能是中文！"
                 }
             },
             confirmPassword: "",
@@ -116,31 +119,33 @@ export default {
     computed: {},
     methods: {
         register() {
-            // console.log(this.phoneNumber)
-            this.$axios.get("http://192.168.1.109:8889/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join(""))
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+            console.log("register");
+            //console.log(this.confirmPwd());
             if (this.confirmPwd()) {
                 var config = {}
-                config.phoneNumber = this.userInfo.phoneNumber.split(" ").join("");
-                config.username = this.userInfo.username;
-                config.password = this.userInfo.password;
+                config.tel = this.userInfo.phoneNumber.split(" ").join("");
+                config.userName = this.userInfo.username;
+                config.passwd = this.userInfo.password;
                 config.SMSCode = this.userInfo.SMSCode;
-                // config.phoneNumber = config.phoneNumber.split(" ").join("");
-                // console.log("register successfully!");
-                console.log(config)
-                // this.$axios.post("/purchase/signUp", config)
-            } else {
-                AlertModule.show({
-                    title: "提示",
-                    content: "请正确填写注册信息！"
+                config.userAuth = this.userInfo.userAuth;
+                // console.log(config)
+                // console.log(JSON.stringify(config))
+                console.log(JSON.parse(JSON.stringify(config)))
+                this.$axios.post("http://192.168.1.109:8889/purchase/signUp", JSON.stringify(config))
+                .then(res => {
+                    
+                    console.log(" register success")
                 })
-                return;
-            }
+                .catch(err => {
+                    console.log(err)
+                })}
+            // } else {
+            //     AlertModule.show({
+            //         title: "提示",
+            //         content: "请正确填写注册信息！"
+            //     })
+            //     return;
+            // }
         },
         // 验证注册表单内容
         confirmPwd() {
@@ -152,14 +157,14 @@ export default {
                     content: "手机号不能为空！"
                 });
                 //ok = false;
-                return;
+                return false;
             }else if (this.$refs.mobile.valid == false) {
                 AlertModule.show({
                     title: "提示",
                     content: "手机号格式错误，请输入中国手机号！"
                 });
                 // ok = false;
-                return;
+                return false;
             }
             if (this.userInfo.username == "" ) {
                 AlertModule.show({
@@ -167,15 +172,15 @@ export default {
                     content: "用户名不能为空！"
                 });
                 // ok = false;
-                return;
+                return false;
             }else if (this.$refs.username.valid == false) {
                 AlertModule.show({
                     title: "提示",
-                    content: "用户名格式错误，用户名长度必须大于等于2小于等于10，前两位必须为中文，其他位只能是中文、数字、字母和下划线，区分大小写！"
+                    content: "用户名格式错误，用户名长度必须大于等于2小于等于5，只能是中文！"
                 });
                 //console.log(this.$refs.username)
                 // ok =false;
-                return;
+                return false;
             }
            if (this.userInfo.password == "") {
                AlertModule.show({
@@ -183,21 +188,21 @@ export default {
                     content: "密码不能为空！"
                 });
                 // ok = false;
-                return;
+                return false;
             } else if (this.$refs.password.valid == false) {
                 AlertModule.show({
                     title: "提示",
                     content: "密码格式错误，密码长度必须大于等于6且小于等于20，只能包含数字、字母和下划线，区分大小写！"
                 });
                 // ok = false;
-                return;
+                return false;
             }
             if (this.confirmPassword == "") {
                 AlertModule.show({
                     title: "提示",
                     content: "确认密码不能为空，请输入确认密码！"
                 });
-                return;
+                return false;
             }
             if (!(this.userInfo.password === this.confirmPassword)) {
                 AlertModule.show({
@@ -205,12 +210,14 @@ export default {
                     content: "两次密码不一致，再次确认密码!"
                 });
                 this.confirmPassword = "";
+                return false;
             }
             if (this.userInfo.SMSCode == "") {
                 AlertModule.show({
                     title: "提示",
                     content: "验证码不能为空！"
                 });
+                return false;
             }
             return true;
         },
@@ -218,7 +225,7 @@ export default {
         requestSMSCode() {
             console.log("requestSMSCode")
             if (this.$refs.mobile.valid) {
-                this.$axios.get("http://192.168.1.109:8889/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join(""))
+                this.$axios.get("http://192.168.1.109:8889/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join("") + "L")
                 .then((res) => {
                     console.log(res.data);
                     //this.userInfo.SMSCode = res.data.SMSCode;
