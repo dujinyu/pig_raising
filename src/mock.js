@@ -10,23 +10,29 @@ const graphicVerificationImage = function() {
 const loginWithPasswd = function(data) {
     console.log(data)
     return {
-        "status": "success"
+        status: "success"
     }
 }
 
 const loginWithSMSCode = function(data) {
     console.log(data)
     return {
-        "status": "success"
+        status: "success"
     }
 }
 const getSMSCode = function() {
     return {
-        "status": "success"
+        status: "success"
     }
 }
 
 const signUp = function(data) {
+    return {
+        status: "success"
+    }
+}
+
+const forgetPwd= function(data) {
     return {
         status: "success"
     }
@@ -37,3 +43,4 @@ Mock.mock("/purchase/login/0", "post", loginWithPasswd)
 Mock.mock("/purchase/login/1", "post", loginWithSMSCode)
 Mock.mock(RegExp("/purchase/getSMSCode/" + ".*"), "get", getSMSCode)
 Mock.mock("/purchase/signUp", "post", signUp)
+Mock.mock("/purchase/forgetpasswd", "post", forgetPwd)

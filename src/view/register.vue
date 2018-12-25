@@ -32,13 +32,13 @@
             <x-input title="密码" name="password" ref="password" placeholder="请输入密码"
                 :type="passwordType" v-model="userInfo.password" :is-type="validPassword"
                 required>
-                <span slot="right" @click="showAndHidPassword">{{ checkPassword }}</span>
+                <span slot="right" @click="showAndHidePassword">{{ checkPassword }}</span>
             </x-input>
         </group>
         <!-- 验证密码 -->
         <group>
             <x-input title="确认密码" name="password" placeholder="请确认密码" :type="confirmPasswordType" v-model="confirmPassword" required>
-                <span slot="right" @click="showAndHidConfirmPassword">{{ confirmCheckPassword }}</span>
+                <span slot="right" @click="showAndHideConfirmPassword">{{ confirmCheckPassword }}</span>
             </x-input>
         </group>
         <!-- 输入验证码 -->
@@ -254,7 +254,7 @@ export default {
             // return;
         },
         //隐藏和查看密码
-        showAndHidPassword() {
+        showAndHidePassword() {
             if (this.flag) {
                 this.passwordType = "text";
                 this.checkPassword = "隐藏密码";
@@ -265,7 +265,7 @@ export default {
                 this.flag = true;
             }
         },
-        showAndHidConfirmPassword() {
+        showAndHideConfirmPassword() {
             if (this.confirmFlag) {
                 this.confirmPasswordType = "text";
                 this.confirmCheckPassword = "隐藏密码";

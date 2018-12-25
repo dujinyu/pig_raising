@@ -1,6 +1,7 @@
 <template>
     <div>
-        <box gap="10px 10px 0px 10px">
+        <x-header :left-options="{showBack: false}">登录</x-header>
+        <box gap="30px 10px 0px 10px">
             <button-tab v-model="index">
                 <button-tab-item selected @on-item-click="selectedLoginWithUsername">手机号密码登录</button-tab-item>
                 <button-tab-item @on-item-click="selectedLoginWithPhoneNumber">手机号验证码登录</button-tab-item>
@@ -30,14 +31,14 @@
 </template>
 
 <script>
-import { Box, XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, Flexbox, FlexboxItem } from 'vux'
+import { Box, XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, Flexbox, FlexboxItem, XHeader } from 'vux'
 import LoginWithPhoneNumber from '../view/loginSubpage/loginWithPhoneNumber.vue'
 import LoginWithUsername from "@/view/loginSubpage/loginWithUsername"
 import { generalAlert } from "@/common/function/func"
 export default {
     name: "Login",
     components: {
-       Box, XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, Flexbox, FlexboxItem,
+       Box, XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, Flexbox, FlexboxItem, XHeader,
        LoginWithPhoneNumber,
        LoginWithUsername
     },
@@ -175,7 +176,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .remind {
         display: flex;
         justify-content: space-around;

@@ -23,7 +23,7 @@ const router = new Router({
         {
             path: "/forgetpassword",
             name: "ForgetPassword",
-            component: resolve => require(["@/view/forgetPassword/forgetPassword"], resolve)
+            component: resolve => require(["@/view/personalInfo/forgetPassword"], resolve)
         },
         {
             path: "/home",

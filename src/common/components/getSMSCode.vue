@@ -54,7 +54,7 @@ export default {
         },
         placeholder: {
             type: String,
-            default: ""
+            default: "请输入验证码"
         }
     },
     data() {
@@ -69,7 +69,7 @@ export default {
     },
     watch: {
         enable: function(newV, oldV) {
-            console.log("change")
+            // console.log("change")
             if (this.enable) {
                 this.buttonDisabled = false;
                 this.buttonTypeInit = "primary";
@@ -79,14 +79,14 @@ export default {
             }
         },
         countDownTime: function(newV, oldV) {
-            console.log("计时改变了")
+            // console.log("计时改变了")
         }
     },
     computed: {
     },
     methods: {
         initCountDown() {
-            console.log("inputData" + this.inputData)
+            // console.log("inputData" + this.inputData)
             // 自定义request事件，给button加上请求验证码的事件
             this.$emit("request")
             // console.log("点击发送验证码")
