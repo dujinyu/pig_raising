@@ -63,7 +63,6 @@
 <script>
 import { XHeader, Group, XInput, XButton, Box, Selector } from 'vux'
 import { generalAlert } from "@/common/function/func"
-import { generateKeyPair } from 'crypto';
 export default {
     name: "Register",
     components: {

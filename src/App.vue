@@ -3,6 +3,7 @@
     <!-- <img src="./assets/logo.png">
     <HelloWorld/> -->
     <router-view></router-view>
+    <!-- <test></test> -->
     <!-- <vux /> -->
   </div>
 </template>
@@ -10,12 +11,13 @@
 <script>
 // import HelloWorld from './components/HelloWorld'
 import Vux from './components/vux'
-
+// import Test from "@/view/test"
 export default {
   name: 'App',
   components: {
     // HelloWorld
-    Vux
+    Vux,
+    // Test
   }
 }
 </script>
