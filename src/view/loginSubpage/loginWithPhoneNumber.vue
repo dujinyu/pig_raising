@@ -23,11 +23,12 @@
 </template>
 
 <script>
-import { XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, AlertModule } from 'vux'
+import { XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem } from 'vux'
+import { generalAlert } from "@/common/function/func"
 export default {
     name: "PhoneNumber",
     components: {
-        XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, AlertModule
+        XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem
     },
     props: {},
     data() {
@@ -53,6 +54,7 @@ export default {
                 this.buttonType = "default";
             }
             this.$emit("phoneNumberAndSMSCode", this.userInfo);
+            this.$emit("validPhoneNumber", this.$refs.mobile.valid);
         },
         "userInfo.SMSCode": function(newV, oldV) {
             this.$emit("phoneNumberAndSMSCode", this.userInfo);
@@ -63,29 +65,24 @@ export default {
         requestSMSCode() {
             console.log("requestSMSCode")
             if (this.$refs.mobile.valid) {
-                this.$axios.get("/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join(""))
+                // 用于登录界面表示假定手机号已经被注册过了
+                this.$axios.get("/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join("") + "N")
                 .then((res) => {
                     console.log(res.data);
                     //this.userInfo.SMSCode = res.data.SMSCode;
-                    if (res.data) {
-                        AlertModule.show({
-                            title: "提示",
-                            content: "验证码请求成功！"
-                        })
+                    if (res.data.status === "telnotexist") {
+                        generalAlert("手机号尚未被注册，请输入正确的手机号，或者前往注册！")
+                    } else if (res.data.status === "success") {
+                        console.log(res.data)
+                        generalAlert("手机验证码发送成功！")
                     }
                 })
                 .catch((err) => {
                     console.log(err);
-                    AlertModule.show({
-                            title: "提示",
-                            content: "验证码请求失败，请输入正确的手机号！"
-                        })
+                    generalAlert("验证码请求失败，请输入正确的手机号！")
                 })
             } else {
-                AlertModule.show({
-                    title: "提示",
-                    content: "手机号格式不正确，请重新输入！"
-                })
+                generalAlert("手机号格式不正确，请重新输入！")
             }
 
             //计时禁用发送验证码功能

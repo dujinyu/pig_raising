@@ -47,6 +47,10 @@
                 <x-button slot="right" :disabled="buttonDisabled" :type="buttonType" mini @click.native="requestSMSCode" :text="buttonText"></x-button>
             </x-input>
         </group>
+        <div class="remind">
+            <span>已经有账号了？请点击<i @click="goToLogin" class="go-to-login">登录</i></span>
+        </div>
+
         <!-- 注册 -->
         <box gap="10px 10px">
             <group>
@@ -57,11 +61,13 @@
 </template>
 
 <script>
-import { XHeader, Group, XInput, XButton, Box, AlertModule, Selector } from 'vux'
+import { XHeader, Group, XInput, XButton, Box, Selector } from 'vux'
+import { generalAlert } from "@/common/function/func"
+import { generateKeyPair } from 'crypto';
 export default {
     name: "Register",
     components: {
-        XHeader, Group, XInput, XButton, Box, AlertModule, Selector
+        XHeader, Group, XInput, XButton, Box, Selector
     },
     props: {},
     data() {
@@ -130,13 +136,20 @@ export default {
                 config.userAuth = this.userInfo.userAuth;
                 // console.log(config)
                 // console.log(JSON.stringify(config))
-                console.log(JSON.parse(JSON.stringify(config)))
-                this.$axios.post("http://192.168.1.109:8889/purchase/signUp", JSON.stringify(config))
+                // console.log(JSON.parse(JSON.stringify(config)))
+                this.$axios.post("/purchase/signUp", config)
                 .then(res => {
-                    
-                    console.log(" register success")
+                    if (res.data.status === "success") {
+                        // 这里需要添加token
+                        this.$router.push({path: "/home"})
+                    } else if (res.data.status === "error") {
+                        generalAlert("验证码填写错误，请重新填写！")
+                    } else if (res.data.status === "warn") {
+                        generalAlert("注册失败！")
+                    }
                 })
                 .catch(err => {
+                    console.log("注册请求失败！")
                     console.log(err)
                 })}
             // } else {
@@ -152,71 +165,44 @@ export default {
             // console.log(this.validPhoneNumber)
             //var ok = true;
             if (this.userInfo.phoneNumber == "") {
-                AlertModule.show({
-                    title: "提示",
-                    content: "手机号不能为空！"
-                });
+                generalAlert("手机号不能为空！")
                 //ok = false;
                 return false;
             }else if (this.$refs.mobile.valid == false) {
-                AlertModule.show({
-                    title: "提示",
-                    content: "手机号格式错误，请输入中国手机号！"
-                });
+                generalAlert("手机号格式错误，请输入中国手机号！")
                 // ok = false;
                 return false;
             }
             if (this.userInfo.username == "" ) {
-                AlertModule.show({
-                    title: "提示",
-                    content: "用户名不能为空！"
-                });
+                generalAlert("用户名不能为空！")
                 // ok = false;
                 return false;
             }else if (this.$refs.username.valid == false) {
-                AlertModule.show({
-                    title: "提示",
-                    content: "用户名格式错误，用户名长度必须大于等于2小于等于5，只能是中文！"
-                });
+                generalAlert("用户名格式错误，用户名长度必须大于等于2小于等于5，只能是中文！")
                 //console.log(this.$refs.username)
                 // ok =false;
                 return false;
             }
            if (this.userInfo.password == "") {
-               AlertModule.show({
-                    title: "提示",
-                    content: "密码不能为空！"
-                });
+                generalAlert("密码不能为空！")
                 // ok = false;
                 return false;
             } else if (this.$refs.password.valid == false) {
-                AlertModule.show({
-                    title: "提示",
-                    content: "密码格式错误，密码长度必须大于等于6且小于等于20，只能包含数字、字母和下划线，区分大小写！"
-                });
+                generalAlert("密码格式错误，密码长度必须大于等于6且小于等于20，只能包含数字、字母和下划线，区分大小写！")
                 // ok = false;
                 return false;
             }
             if (this.confirmPassword == "") {
-                AlertModule.show({
-                    title: "提示",
-                    content: "确认密码不能为空，请输入确认密码！"
-                });
+                generalAlert("确认密码不能为空，请输入确认密码！")
                 return false;
             }
             if (!(this.userInfo.password === this.confirmPassword)) {
-                AlertModule.show({
-                    title: "提示",
-                    content: "两次密码不一致，再次确认密码!"
-                });
+                generalAlert("两次密码不一致，再次确认密码")
                 this.confirmPassword = "";
                 return false;
             }
             if (this.userInfo.SMSCode == "") {
-                AlertModule.show({
-                    title: "提示",
-                    content: "验证码不能为空！"
-                });
+                generalAlert("验证码不能为空！")
                 return false;
             }
             return true;
@@ -225,29 +211,24 @@ export default {
         requestSMSCode() {
             console.log("requestSMSCode")
             if (this.$refs.mobile.valid) {
-                this.$axios.get("http://192.168.1.109:8889/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join("") + "L")
+                // 假定号码没有被注册
+                this.$axios.get("/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join("") + "L")
                 .then((res) => {
                     console.log(res.data);
                     //this.userInfo.SMSCode = res.data.SMSCode;
-                    if (res.data) {
-                        AlertModule.show({
-                            title: "提示",
-                            content: "验证码请求成功！"
-                        })
+                    if (res.data.status === "telhasregisted") {
+                        generalAlert("手机号已经被注册！请前往登录，或者填写新手机号！")
+                    } else if (res.data.status === "success") {
+                        console.log(res.data)
+                        generalAlert("手机验证码发送成功！")
                     }
                 })
                 .catch((err) => {
+                    console.log("手机验证码请求错误！")
                     console.log(err);
-                    AlertModule.show({
-                            title: "提示",
-                            content: "验证码请求失败，请输入正确的手机号！"
-                        })
                 })
             } else {
-                AlertModule.show({
-                    title: "提示",
-                    content: "手机号格式不正确，请重新输入！"
-                })
+                generalAlert("手机号格式不正确，请重新输入！")
             }
             //计时禁用发送验证码功能
             this.buttonDisabled = true;
@@ -295,6 +276,9 @@ export default {
                 this.confirmCheckPassword = "查看密码";
                 this.confirmFlag = true;
             }
+        },
+        goToLogin() {
+            this.$router.push({path: "/login"})
         }
     },
     created() {},
@@ -303,7 +287,9 @@ export default {
 </script>
 
 <style scoped>
-
+.go-to-login {
+    color: blue
+}
 </style>
 
 

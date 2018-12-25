@@ -19,6 +19,11 @@
                 <span slot="right" @click="showAndHidPassword">{{ checkPassword }}</span>
             </x-input>
         </group>
+        <group>
+            <x-input title="图形验证码" placeholder="请输入验证码" v-model="userInfo.graVerCode">
+                <img slot="right-full-height" :src="graphicVerificationCode" @click="getVerImg" alt="点击重新加载">
+            </x-input>
+        </group>
         <!-- <x-button v-if="flag">hahah</x-button> -->
     </div>
 </template>
@@ -35,11 +40,13 @@ export default {
         return {
             userInfo: {
                 phoneNumber: "",
-                password: ""
+                password: "",
+                graVerCode: ""
             },
             flag: true,
             passwordType: "password",
             checkPassword: "查看密码",
+            graphicVerificationCode: ""
             // validUsername: function(value) {
             //     var isUserName = /^[\u4e00-\u9fa5]{2}([\u4e00-\u9fa5]|[a-zA-Z0-9]|[_]){0,8}$/;
             //     return {
@@ -56,6 +63,9 @@ export default {
             this.$emit("validPhoneNumber", this.$refs.mobile.valid);
         },
         "userInfo.password": function(newV, oldV) {
+            this.$emit("phoneNumberAndPassword", this.userInfo);
+        },
+        "userInfo.graVerCode": function(newV, oldV) {
             this.$emit("phoneNumberAndPassword", this.userInfo);
         }
 
@@ -74,10 +84,21 @@ export default {
                 this.checkPassword = "查看密码";
                 this.flag = true;
             }
+        },
+        getVerImg() {
+            this.$axios("/getVerificationCode")
+            .then(res => {
+                this.graphicVerificationCode = res.data.img
+            })
+            .catch(err => {
+                console.log(err)
+                console.log("图形验证码请求错误")
+            })
         }
     },
     created() {
         // this.$emit("usernameAndPassword", this.userInfo);
+        this.getVerImg()
     },
     mounted() {
 

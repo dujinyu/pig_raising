@@ -21,6 +21,9 @@ import router from './router'
 //vuex,Store
 import store from './store'
 
+// MOCK.JS
+require("./mock.js")
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
