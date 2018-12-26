@@ -7,7 +7,7 @@ const router = new Router({
         {
             path: "/",
             name: "index",
-            redirect: "/login"
+            redirect: "/home"
 
         },
         {
@@ -28,7 +28,40 @@ const router = new Router({
         {
             path: "/home",
             name: "Home",
-            component: resolve => require(["@/view/home"], resolve)
+            component: resolve => require(["@/view/home"], resolve),
+            // redirect: "/home/pigfarm",
+            children: [
+                {
+                    path: "pigfarm",
+                    name: "PigFarm",
+                    component: resolve => require(["@/view/pigFarm/pigFarm"], resolve)
+                },
+                {
+                    path: "contract",
+                    name: "Contract",
+                    component: resolve => require(["@/view/contract/contract"], resolve)
+                },
+                {
+                    path: "personal-info",
+                    name: "PersonalInfo",
+                    component: resolve => require(["@/view/personalInfo/me"], resolve)
+                }
+            ]
+        },
+        {
+            path: "/modify-username",
+            name: "ModifyUsername",
+            component: resolve => require(["@/view/personalInfo/modifyUsername"], resolve)
+        },
+        {
+            path: "/modify-password",
+            name: "ModifyPassword",
+            component: resolve => require(["@/view/personalInfo/modifyPassword"], resolve)
+        },
+        {
+            path: "/modify-phonenumber",
+            name: "ModifyPhoneNumber",
+            component: resolve => require(["@/view/personalInfo/modifyPhoneNumber"], resolve)
         }
     ]
 })

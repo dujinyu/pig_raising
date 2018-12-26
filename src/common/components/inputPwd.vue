@@ -1,4 +1,14 @@
 <template>
+    <!--
+        该组件是密码输入组件
+        需要的参数:
+            title: 输入框左侧标题，String类型，默认值为“密码”
+            placeholder: 占位符，String类型，默认值为“请输入密码”
+            checkPwdText: type="password"时，右侧显示的文字，String类型，默认值为“查看密码”
+            hidePwdText: type="text"时，右侧显示的文字，String类型，默认值为“隐藏密码”
+            is-type: 传入的验证输入值的函数，Function类型，无默认值
+            v-model: 监听x-input的输入值
+     -->
     <div>
         <x-input :title="title"
                  ref="password"
@@ -44,7 +54,14 @@ export default {
             default: "隐藏密码"
         },
         isType: {
-            type: Function
+            type: Function,
+            default: (value) => {
+                var isPassword = /^(\w){6,20}$/;
+                return {
+                    valid: isPassword.test(value),
+                    msg: "密码格式错误，密码长度必须大于等于6且小于等于20，只能包含数字、字母和下划线，区分大小写！"
+                }
+            },
         }
     },
     data() {
@@ -81,7 +98,7 @@ export default {
                 this.passwordType = "password";
                 this.checkPassword = this.checkPwdText;
             }
-        },
+        }
     },
     created() {},
     mounted() {}

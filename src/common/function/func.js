@@ -1,4 +1,4 @@
-import {AlertModule} from "vux"
+import { AlertModule } from "vux"
 export function generalAlert(content, title="提示") {
     AlertModule.show({
         title: title,

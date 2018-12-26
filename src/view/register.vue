@@ -286,9 +286,14 @@ export default {
 </script>
 
 <style scoped>
-.go-to-login {
-    color: blue
-}
+    .remind {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 15px;
+    }
+    .go-to-login {
+        color: blue
+    }
 </style>
 
 

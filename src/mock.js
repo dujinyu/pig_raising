@@ -32,7 +32,19 @@ const signUp = function(data) {
     }
 }
 
-const forgetPwd= function(data) {
+const forgetPwd = function(data) {
+    return {
+        status: "success"
+    }
+}
+
+const rename = function(data) {
+    return {
+        status: "success"
+    }
+}
+
+const repwd = function(data) {
     return {
         status: "success"
     }
@@ -44,3 +56,5 @@ Mock.mock("/purchase/login/1", "post", loginWithSMSCode)
 Mock.mock(RegExp("/purchase/getSMSCode/" + ".*"), "get", getSMSCode)
 Mock.mock("/purchase/signUp", "post", signUp)
 Mock.mock("/purchase/forgetpasswd", "post", forgetPwd)
+Mock.mock("/purchase/modifyusername", "post", rename)
+Mock.mock("/purchase/modifypasswd", "post", repwd)
