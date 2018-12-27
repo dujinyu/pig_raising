@@ -1,4 +1,8 @@
 <template>
+    <!--
+        show: 控制loading是否显示，Boolean类型，默认false不显示，可选true
+        text：loading时显示的文字样式，String类型，默认“加载中”
+     -->
     <div>
         <div v-transfer-dom>
             <loading :show="show" :text="text"></loading>

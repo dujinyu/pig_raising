@@ -50,6 +50,18 @@ const repwd = function(data) {
     }
 }
 
+const step1 = function() {
+    return {
+        status: "success"
+    }
+}
+
+const step2 = function(data) {
+    return {
+        status: "success"
+    }
+}
+
 Mock.mock("/getVerificationCode", "get", graphicVerificationImage)
 Mock.mock("/purchase/login/0", "post", loginWithPasswd)
 Mock.mock("/purchase/login/1", "post", loginWithSMSCode)
@@ -58,3 +70,5 @@ Mock.mock("/purchase/signUp", "post", signUp)
 Mock.mock("/purchase/forgetpasswd", "post", forgetPwd)
 Mock.mock("/purchase/modifyusername", "post", rename)
 Mock.mock("/purchase/modifypasswd", "post", repwd)
+Mock.mock("/purchase/modifyuserid/step1", "get", step1)
+Mock.mock("/purchase/modifyuserid/step2", "post", step2)

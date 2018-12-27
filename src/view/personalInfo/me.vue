@@ -3,7 +3,7 @@
         个人信息
         <group>
             <cell title="用户名" :value="userInfo.username" @click.native="changeUsername"></cell>
-            <cell title="手机号" :value="userInfo.phoneNumber" @click.native="changePhoneNumber"></cell>
+            <cell title="手机号" :value="userInfo.phoneNumber.substring(0, 3) + ' ' + userInfo.phoneNumber.substring(3, 7) + ' ' + userInfo.phoneNumber.substring(7)" @click.native="changePhoneNumber"></cell>
             <cell title="密码" value="******" @click.native="changePassword"></cell>
         </group>
 
@@ -33,7 +33,7 @@ export default {
             this.$router.push({name: "ModifyUsername", params: {username: this.userInfo.username}})
         },
         changePhoneNumber() {
-            this.$router.push({name: "ModifyPhoneNumber"})
+            this.$router.push({name: "ModifyPhoneNumber", params: {phoneNumber: this.userInfo.phoneNumber}})
             return
         },
         changePassword() {

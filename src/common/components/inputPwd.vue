@@ -8,6 +8,8 @@
             hidePwdText: type="text"时，右侧显示的文字，String类型，默认值为“隐藏密码”
             is-type: 传入的验证输入值的函数，Function类型，无默认值
             v-model: 监听x-input的输入值
+            @valid: 自定义事件获取is-type验证的结果，true或false
+            @request: 在span中文字添加请求验证码的事件
      -->
     <div>
         <x-input :title="title"

@@ -68,15 +68,18 @@ export default {
         }
     },
     watch: {
-        enable: function(newV, oldV) {
-            // console.log("change")
-            if (this.enable) {
-                this.buttonDisabled = false;
-                this.buttonTypeInit = "primary";
-            } else {
-                this.buttonDisabled = true;
-                this.buttonTypeInit = "default";
-            }
+        enable: {
+            handler(newV, oldV) {
+                // console.log("change")
+                if (this.enable) {
+                    this.buttonDisabled = false;
+                    this.buttonTypeInit = "primary";
+                } else {
+                    this.buttonDisabled = true;
+                    this.buttonTypeInit = "default";
+                }
+            },
+            immediate: true
         },
         countDownTime: function(newV, oldV) {
             // console.log("计时改变了")

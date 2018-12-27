@@ -16,7 +16,7 @@
         </group>
 
         <group>
-            <input-pwd title="输入新密码" v-model="newPwd" placeholder="新密码" :is-type="validPassword" @valid="getValidValue"></input-pwd>
+            <input-pwd title="输入新密码" v-model="newPwd" placeholder="新密码" @valid="getValidValue"></input-pwd>
         </group>
 
         <group>
@@ -49,23 +49,20 @@ export default {
         return {
             phoneNumber: "",
             SMSCode: "",
-            enable: "",
+            enable: false,
             newPwd: "",
             confirmPwd: "",
-            validPassword: function (value) {
-                var isPassword = /^(\w){6,20}$/;
-                return {
-                    valid: isPassword.test(value),
-                    msg: "密码格式错误，密码长度必须大于等于6且小于等于20，只能包含数字、字母和下划线，区分大小写！"
-                }
-            },
             valid: false,
             findBackBtnText: "找回设置新密码"
         }
     },
     watch: {
-        phoneNumber: function() {
-            this.enable = this.$refs.mobile.valid
+        phoneNumber: function(newV, oldV) {
+            if (newV == "") {
+                this.enable = false
+            } else {
+                this.enable = this.$refs.mobile.valid
+            }
         }
     },
     computed: {},
