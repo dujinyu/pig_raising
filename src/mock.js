@@ -62,6 +62,12 @@ const step2 = function(data) {
     }
 }
 
+const step3 = function(data) {
+    return {
+        status: "success"
+    }
+}
+
 Mock.mock("/getVerificationCode", "get", graphicVerificationImage)
 Mock.mock("/purchase/login/0", "post", loginWithPasswd)
 Mock.mock("/purchase/login/1", "post", loginWithSMSCode)
@@ -72,3 +78,4 @@ Mock.mock("/purchase/modifyusername", "post", rename)
 Mock.mock("/purchase/modifypasswd", "post", repwd)
 Mock.mock("/purchase/modifyuserid/step1", "get", step1)
 Mock.mock("/purchase/modifyuserid/step2", "post", step2)
+Mock.mock("/purchase/modifyuserid/step3", "post", step3)

@@ -13,7 +13,7 @@
             <flow-state :state="state[2]" :title="title[2]" :is-done="isDone[4]"></flow-state>
         </flow>
         <step-one v-if="isDone[0] && !isDone[2]" @stepOneOk="getStepOneStatus" :phoneNumber="phoneNumber"></step-one>
-        <step-two v-if="isDone[2] && !isDone[4]"></step-two>
+        <step-two v-if="isDone[2] && !isDone[4]" @prevStep="getPrevStep" @stepTwoOk="getStepTwoStatus"></step-two>
         <step-three v-if="isDone[4]"></step-three>
         <!-- <button @click="anniu">anniu</button> -->
     </div>
@@ -54,6 +54,18 @@ export default {
             console.log(this.isDone)
             console.log(this.tips)
         },
+        getPrevStep() {
+            console.log("fanhui")
+            this.$set(this.isDone, 1, false)
+            this.$set(this.isDone, 2, false)
+            this.$set(this.tips, 1, "")
+        },
+        getStepTwoStatus(data) {
+            if (data.status == "success") {
+                this.$set(this.isDone, 3, true)
+                this.$set(this.isDone, 4, true)
+            }
+        }
         // anniu() {
 
         //     console.log(generalAlert("haha"))

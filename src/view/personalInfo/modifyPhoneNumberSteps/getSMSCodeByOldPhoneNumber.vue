@@ -5,7 +5,7 @@
         </group>
         <box gap="10px 10px">
             <group>
-                <x-button @click.native="nextStep" :type="buttonType">下一步</x-button>
+                <x-button @click.native="nextStep" type="primary">下一步</x-button>
             </group>
         </box>
     </div>
@@ -32,16 +32,16 @@ export default {
         }
     },
     watch: {
-        SMSCode: {
-            handler(newV, oldV) {
-                if (newV.length == 6) {
-                    this.buttonType = "primary"
-                } else {
-                    this.buttonType = "default"
-                }
-            },
-            immediate: true
-        }
+        // SMSCode: {
+        //     handler(newV, oldV) {
+        //         if (newV.length == 6) {
+        //             this.buttonType = "primary"
+        //         } else {
+        //             this.buttonType = "default"
+        //         }
+        //     },
+        //     immediate: true
+        // }
     },
     computed: {},
     methods: {
