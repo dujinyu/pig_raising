@@ -1,25 +1,29 @@
 <template>
     <div>
-        <div>
-            <icon type="success" is-msg class="remind"></icon>
-            <span class="remind">手机号已经修改成功，请点击重新登录！</span>
-        </div>
-        <box gap="10px 10px">
-            <x-button @click.native="nextStep" type="primary">重新登录</x-button>
-        </box>
+        <msg :title="title" :description="description" :buttons="buttons" :icon="icon"></msg>
     </div>
 </template>
 
 <script>
-import { Group, XButton, Box, Icon } from "vux"
+import { Msg } from "vux"
 export default {
     name: "",
     components: {
-        Group, XButton, Box, Icon
+        Msg
     },
     props: {},
     data() {
         return {
+            description: "手机号已经修改成功，请点击重新登录！",
+            buttons: [
+                {
+                    type: "primary",
+                    text: "重新登录",
+                    onClick: this.nextStep.bind(this)
+                }
+            ],
+            title: "操作成功",
+            icon: "success"
         }
     },
     watch: {},

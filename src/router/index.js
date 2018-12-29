@@ -62,6 +62,16 @@ const router = new Router({
             path: "/modify-phonenumber",
             name: "ModifyPhoneNumber",
             component: resolve => require(["@/view/personalInfo/modifyPhoneNumber"], resolve)
+        },
+        {
+            path: "/details",
+            name: "ContractDetails",
+            component: resolve => require(["@/view/contract/contractDetails"], resolve)
+        },
+        {
+            path: "/add-contract",
+            name: "AddContract",
+            component: resolve => require(["@/view/contract/addContract"], resolve)
         }
     ]
 })

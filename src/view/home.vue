@@ -1,7 +1,7 @@
 <template>
     <div>
-        <x-header>中畜智联</x-header>
-        <router-view></router-view>
+        <x-header :left-options="{showBack: false}">中畜智联</x-header>
+        <router-view :style="routerViewClass"></router-view>
         <tabbar v-model="index">
             <tabbar-item>
                 <span slot="label">猪场</span>
@@ -17,16 +17,20 @@
 </template>
 
 <script>
-import { XHeader, Tabbar, TabbarItem } from "vux"
+import { XHeader, Tabbar, TabbarItem, ViewBox } from "vux"
 export default {
     name: "Home",
     components: {
-        XHeader, Tabbar, TabbarItem
+        XHeader, Tabbar, TabbarItem, ViewBox
     },
     props: {},
     data() {
         return {
-            index: 0
+            index: 0,
+            routerViewClass: {
+                height: "",
+                overflow: "scroll"
+            }
         }
     },
     watch:{
@@ -44,9 +48,16 @@ export default {
         }
     },
     computed: {},
-    methods: {},
+    methods: {
+        setHeight() {
+            this.routerViewClass.height = window.innerHeight - 96 + "px"
+            console.log(this.routerViewClass)
+        }
+    },
     created() {},
-    mounted() {}
+    mounted() {
+        this.setHeight()
+    }
 }
 </script>
 

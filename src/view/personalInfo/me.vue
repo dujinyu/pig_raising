@@ -2,10 +2,14 @@
     <div>
         个人信息
         <group>
-            <cell title="用户名" :value="userInfo.username" @click.native="changeUsername"></cell>
-            <cell title="手机号" :value="userInfo.phoneNumber.substring(0, 3) + ' ' + userInfo.phoneNumber.substring(3, 7) + ' ' + userInfo.phoneNumber.substring(7)" @click.native="changePhoneNumber"></cell>
-            <cell title="密码" value="******" @click.native="changePassword"></cell>
+            <cell title="用户名" :value="userInfo.username" @click.native="changeUsername" is-link></cell>
+            <cell title="手机号" :value="userInfo.phoneNumber.substring(0, 3) + ' ' + userInfo.phoneNumber.substring(3, 7) + ' ' + userInfo.phoneNumber.substring(7)" @click.native="changePhoneNumber" is-link></cell>
+            <cell title="密码" value="******" @click.native="changePassword" is-link></cell>
         </group>
+        <group>
+            <cell title="注销" @click.native="logout"></cell>
+        </group>
+
 
     </div>
 </template>
@@ -38,6 +42,14 @@ export default {
         },
         changePassword() {
             this.$router.push({name: "ModifyPassword"})
+        },
+        logout() {
+            this.$axios.get("/purchase/logout")
+            .then(res => {
+                if (res.data.status == "success") {
+                    this.$router.push({ name: "Login" })
+                }
+            })
         }
     },
     created() {},

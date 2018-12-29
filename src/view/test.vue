@@ -1,6 +1,6 @@
 <template>
     <div>
-        <group>
+        <!-- <group>
             <GetSMSCode :enable="enable" :countDownTime="time" v-model="inputData" @request="requestSMSCode" placeholder="请输入验证码"></GetSMSCode>
         </group>
         <br>
@@ -8,19 +8,24 @@
         <button @click="change">按钮</button>
         <group>
             <input-pwd title="密码" placeholder="请输入密码" v-model="password" :is-type="validPassword"></input-pwd>
-        </group>
+        </group> -->
+        <x-header>hahah</x-header>
+        <div style="overflow: scroll; height: 300px">
+            <cell v-for="i in 100" :key="i" value="呵呵" title="你"></cell>
+        </div>
+
     </div>
 </template>
 
 <script>
-import { Group } from "vux"
+import { Group, Cell, XHeader } from "vux"
 import GetSMSCode from "@/common/components/getSMSCode"
 import InputPwd from "@/common/components/inputPwd"
 import Loading from "@/common/components/loading"
 export default {
     name: "Test",
     components: {
-        GetSMSCode, Group, InputPwd, Loading
+        GetSMSCode, Group, InputPwd, Loading, Cell, XHeader
     },
     props: {},
     data() {
