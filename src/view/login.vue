@@ -99,8 +99,11 @@ export default {
                     console.log(config)
                     this.$post(this.LoginWithUsernameURL, config)
                     .then(res => {
+                        console.log(res.headers)
                         if (res.data.status === "success") {
                             console.log("手机号密码登录成功")
+                            // 设置token
+                            this.$store.commit("SET_TOKEN", res.headers.token)
                             this.$router.push({path: "/home"})
                         } else if (res.data.status === "error") {
                             generalAlert("图形验证码填写错误，请重新填写！")
@@ -122,9 +125,11 @@ export default {
                     console.log(config)
                     this.$post(this.LoginWithPhoneNumberURL, config)
                     .then(res => {
+                        console.log(res.headers)
                         if (res.data.status === "success") {
                             console.log("手机号验证码登录成功")
                             // 这里需要添加token
+                            this.$store.commit("SET_TOKEN", res.headers.token)
                             this.$router.push({path: "/home"})
                         } else if (res.data.status === "error") {
                             generalAlert("手机号或短信验证码填写不正确，请重新填写！")

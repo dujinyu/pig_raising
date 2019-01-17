@@ -9,10 +9,18 @@ const store =  new Vuex.Store({
             username: "",
             password: "",
             SMSCode: ""
-        }
+        },
+        token: ""
     },
     mutations: {
-
+        SET_TOKEN(state, token) {
+            state.token = token
+            localStorage.token = token
+        },
+        DEL_TOKEN(state) {
+            state.token = ""
+            localStorage.removeItem("token")
+        }
     }
 })
 

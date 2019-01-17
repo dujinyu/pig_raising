@@ -71,7 +71,7 @@ export default {
         enable: {
             handler(newV, oldV) {
                 // console.log("change")
-                if (this.enable) {
+                if (this.enable && this.countDownTimeInit==60) {
                     this.buttonDisabled = false;
                     this.buttonTypeInit = "primary";
                 } else {
