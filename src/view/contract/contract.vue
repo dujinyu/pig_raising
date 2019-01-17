@@ -40,7 +40,8 @@ export default {
                     value: "111111111"
                 }
             ],
-            requestDone: false
+            requestDone: false,
+            getContractNumURL: "/purchase/getContractNum"
         }
     },
     watch: {
@@ -75,7 +76,7 @@ export default {
     },
     created() {},
     mounted() {
-        this.$axios.get("/purchase/getContractNum")
+        this.$get(this.getContractNumURL)
         .then(res => {
             if (res.data.status == "timeout") {
                 generalAlert("会话超时！")

@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { XHeader, Group, XInput, XButton, Box, Selector } from 'vux'
+import { XHeader, Group, XInput, XButton, Box, Selector, querystring } from 'vux'
 import { generalAlert } from "@/common/function/func"
 export default {
     name: "Register",
@@ -104,7 +104,10 @@ export default {
             checkPassword: "查看密码",
             confirmFlag: true, //用于标志查看确认密码
             confirmPasswordType: "password",
-            confirmCheckPassword: "查看密码"
+            confirmCheckPassword: "查看密码",
+            // URL
+            signUpURL: "/purchase/signUp",
+            getSMSCodeURL: "/purchase/getSMSCode/"
 
         }
     },
@@ -136,8 +139,10 @@ export default {
                 // console.log(config)
                 // console.log(JSON.stringify(config))
                 // console.log(JSON.parse(JSON.stringify(config)))
-                this.$axios.post("/purchase/signUp", config)
+                console.log(querystring.stringify(config))
+                this.$post(this.signUpURL, config)
                 .then(res => {
+                    console.log(res.data)
                     if (res.data.status === "success") {
                         // 这里需要添加token
                         this.$router.push({path: "/home"})
@@ -150,7 +155,8 @@ export default {
                 .catch(err => {
                     console.log("注册请求失败！")
                     console.log(err)
-                })}
+                })
+            }
             // } else {
             //     AlertModule.show({
             //         title: "提示",
@@ -211,14 +217,15 @@ export default {
             console.log("requestSMSCode")
             if (this.$refs.mobile.valid) {
                 // 假定号码没有被注册
-                this.$axios.get("/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join("") + "L")
+                let phoneNumber = this.userInfo.phoneNumber.split(" ").join("")
+                this.$get(this.getSMSCodeURL + phoneNumber + "L")
                 .then((res) => {
                     console.log(res.data);
                     //this.userInfo.SMSCode = res.data.SMSCode;
                     if (res.data.status === "telhasregisted") {
                         generalAlert("手机号已经被注册！请前往登录，或者填写新手机号！")
                     } else if (res.data.status === "success") {
-                        console.log(res.data)
+                        console.log(res)
                         generalAlert("手机验证码发送成功！")
                     }
                 })

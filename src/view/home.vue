@@ -1,6 +1,9 @@
 <template>
     <div>
-        <x-header :left-options="{showBack: false}">中畜智联</x-header>
+        <!-- <x-header :left-options="{showBack: false}" :title="headerValue[index]"></x-header> -->
+        <x-header v-if="index == 0" :left-options="{showBack: false}">猪场</x-header>
+        <x-header v-if="index == 1" :left-options="{showBack: false}">合同列表<router-link :to="{ name: 'AddContract' }" slot="right">添加合同</router-link></x-header>
+        <x-header v-if="index == 2" :left-options="{showBack: false}">个人信息</x-header>
         <router-view :style="routerViewClass"></router-view>
         <tabbar v-model="index">
             <tabbar-item>
@@ -30,7 +33,8 @@ export default {
             routerViewClass: {
                 height: "",
                 overflow: "scroll"
-            }
+            },
+            headerValue: ["猪场", "合同列表", "个人信息"]
         }
     },
     watch:{

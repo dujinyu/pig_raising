@@ -53,7 +53,10 @@ export default {
             newPwd: "",
             confirmPwd: "",
             valid: false,
-            findBackBtnText: "找回设置新密码"
+            findBackBtnText: "找回设置新密码",
+            // URL
+            forgetPasswordURL: "/purchase/forgetpasswd",
+            getSMSCodeURL: "/purchase/getSMSCode/"
         }
     },
     watch: {
@@ -77,7 +80,7 @@ export default {
                     newpasswd: this.confirmPwd
                 }
                 // console.log(config)
-                this.$axios.post("/purchase/forgetpasswd", config)
+                this.$post(this.forgetPasswordURL, config)
                 .then(res => {
                     let status = res.data.status
                     if (status === "success") {
@@ -100,8 +103,9 @@ export default {
         },
         requestSMSCode() {
             if (this.$refs.mobile.valid == true) {
-                this.$axios.get("/purchase/getSMSCode/" + this.phoneNumber.split(" ").join("") + "N")
+                this.$get(this.getSMSCodeURL + this.phoneNumber.split(" ").join("") + "N")
                 .then(res => {
+                    console.log(res.data)
                     let status = res.data.status
                     if (status == "success") {
                         generalAlert("验证码发送成功！")

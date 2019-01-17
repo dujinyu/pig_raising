@@ -27,7 +27,9 @@ export default {
             userInfo: {
                 username: "张三",
                 phoneNumber: "13437283424"
-            }
+            },
+            // URL
+            logoutURL: "/purchase/logout"
         }
     },
     watch: {},
@@ -44,7 +46,7 @@ export default {
             this.$router.push({name: "ModifyPassword"})
         },
         logout() {
-            this.$axios.get("/purchase/logout")
+            this.$get(this.logoutURL)
             .then(res => {
                 if (res.data.status == "success") {
                     this.$router.push({ name: "Login" })

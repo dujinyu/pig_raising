@@ -46,7 +46,9 @@ export default {
                 phoneNumber: "",
                 SMSCode: ""
             },
-            enable: false
+            enable: false,
+            step3URL: "/purchase/modifyuserid/step3",
+            getSMSCodeURL: "/purchase/getSMSCode/"
         }
     },
     watch: {
@@ -84,8 +86,9 @@ export default {
                 tel: this.userInfo.phoneNumber,
                 SMSCode: this.userInfo.SMSCode
             }
-            this.$axios.post("/purchase/modifyuserid/step3", config)
+            this.$post(this.step3URL, config)
             .then(res => {
+                console.log(res.data)
                 let status = res.data.status
                 if (status == "success") {
                     generalAlert("新手机号修改成功！请重新登录！")
@@ -114,8 +117,9 @@ export default {
         },
         requestSMSCode() {
             if (this.userInfo.phoneNumber != "" && this.$refs.mobile.valid) {
-                this.$axios.get("/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join() + "L")
+                this.$get(this.getSMSCodeURL + this.userInfo.phoneNumber.split(" ").join("") + "L")
                 .then(res => {
+                    console.log(res.data)
                     let status = res.data.status
                     if (status == "success") {
                         generalAlert("验证码发送成功！")

@@ -39,14 +39,15 @@ export default {
     data() {
         return {
             userInfo: {
-                phoneNumber: "",
-                password: "",
+                phoneNumber: "134 3728 3424",
+                password: "123456",
                 graVerCode: ""
             },
             flag: true,
             passwordType: "password",
             checkPassword: "查看密码",
-            graphicVerificationCode: ""
+            graphicVerificationCode: "",
+            getGraphicVerificationCodeURL: "/getVerificationCode"
             // validUsername: function(value) {
             //     var isUserName = /^[\u4e00-\u9fa5]{2}([\u4e00-\u9fa5]|[a-zA-Z0-9]|[_]){0,8}$/;
             //     return {
@@ -86,7 +87,7 @@ export default {
             }
         },
         getVerImg() {
-            this.$axios("/getVerificationCode")
+            this.$get(this.getGraphicVerificationCodeURL)
             .then(res => {
                 this.graphicVerificationCode = res.data.img
             })

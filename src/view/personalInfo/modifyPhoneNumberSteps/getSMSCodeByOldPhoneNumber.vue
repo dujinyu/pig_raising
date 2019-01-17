@@ -27,7 +27,9 @@ export default {
         return {
             SMSCode: "",
             buttonType: "default",
-            alertText: ""
+            alertText: "",
+            step1URL: "/purchase/modifyuserid/step1",
+            step2URL: "/purchase/modifyuserid/step2"
             // 手机号根据
         }
     },
@@ -47,8 +49,9 @@ export default {
     methods: {
         requestSMSCode() {
             console.log("请求验证码！")
-            this.$axios.get("/purchase/modifyuserid/step1")
+            this.$get(this.step1URL)
             .then(res => {
+                console.log(res.data)
                 let status = res.data.status
                 if (status == "success") {
                     generalAlert("短信验证码获取成功！")
@@ -73,7 +76,7 @@ export default {
                 return
             }
             let config = { SMSCode: this.SMSCode }
-            this.$axios.post("/purchase/modifyuserid/step2", config)
+            this.$post(this.step2URL, config)
             .then(res => {
                 let status = res.data.status
                 if (status == "success") {

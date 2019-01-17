@@ -45,7 +45,7 @@ export default {
     computed: {},
     methods: {
         getStepOneStatus(data) {
-            console.log("tiaozhuan")
+            console.log("跳转")
             if (data.status == "success") {
                 this.$set(this.isDone, 1, true)
                 this.$set(this.isDone, 2, true)
@@ -55,7 +55,7 @@ export default {
             console.log(this.tips)
         },
         getPrevStep() {
-            console.log("fanhui")
+            console.log("返回")
             this.$set(this.isDone, 1, false)
             this.$set(this.isDone, 2, false)
             this.$set(this.tips, 1, "")
@@ -66,10 +66,6 @@ export default {
                 this.$set(this.isDone, 4, true)
             }
         }
-        // anniu() {
-
-        //     console.log(generalAlert("haha"))
-        // }
     },
     created() {},
     mounted() {}

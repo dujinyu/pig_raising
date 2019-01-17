@@ -12,8 +12,9 @@ import FastClick from 'fastclick'
 FastClick.attach(document.body)
 
 //全局挂载axios，不用挨个引入
-import Axios from '@/common/axios'
-Vue.prototype.$axios = Axios
+import { get, post } from '@/common/axios'
+Vue.prototype.$get = get
+Vue.prototype.$post = post
 
 //路由router
 import router from './router'
@@ -22,7 +23,7 @@ import router from './router'
 import store from './store'
 
 // MOCK.JS
-require("./mock.js")
+// require("./mock.js")
 
 Vue.config.productionTip = false
 

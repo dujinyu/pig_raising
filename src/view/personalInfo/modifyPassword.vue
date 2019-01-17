@@ -39,7 +39,8 @@ export default {
             oldPwdFlag: false,
             newPwdFlag: false,
             confirmNewPwdFlag: false,
-            show: false
+            show: false,
+            modifypasswdURL: "/purchase/modifypasswd"
         }
     },
     watch: {},
@@ -52,7 +53,7 @@ export default {
                     oldpasswd: this.oldPwd,
                     newpasswd: this.confirmNewPwd
                 }
-                this.$axios.post("/purchase/modifypasswd", config)
+                this.$post(this.modifypasswdURL, config)
                 .then(res => {
                     this.show = false
                     let status = res.data.status

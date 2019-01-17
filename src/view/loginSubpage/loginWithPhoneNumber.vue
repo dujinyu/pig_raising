@@ -40,7 +40,8 @@ export default {
             buttonText: "发送验证码",
             countDownTime: 60,
             buttonType: "default",
-            buttonDisabled: true
+            buttonDisabled: true,
+            getSMSCodeURL: "/purchase/getSMSCode/"
         }
     },
     watch:{
@@ -66,14 +67,16 @@ export default {
             console.log("requestSMSCode")
             if (this.$refs.mobile.valid) {
                 // 用于登录界面表示假定手机号已经被注册过了
-                this.$axios.get("/purchase/getSMSCode/" + this.userInfo.phoneNumber.split(" ").join("") + "N")
+                console.log(this.userInfo.phoneNumber.split(" ").join(""))
+                let phoneNumber = this.userInfo.phoneNumber.split(" ").join("")
+                this.$get(this.getSMSCodeURL + phoneNumber + "N")
                 .then((res) => {
                     console.log(res.data);
                     //this.userInfo.SMSCode = res.data.SMSCode;
                     if (res.data.status === "telnotexist") {
                         generalAlert("手机号尚未被注册，请输入正确的手机号，或者前往注册！")
                     } else if (res.data.status === "success") {
-                        console.log(res.data)
+                        console.log(res)
                         generalAlert("手机验证码发送成功！")
                     }
                 })

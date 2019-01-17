@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { Box, XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, Flexbox, FlexboxItem, XHeader } from 'vux'
+import { Box, XInput, Group, XButton, Cell, ButtonTab, ButtonTabItem, Flexbox, FlexboxItem, XHeader, } from 'vux'
 import LoginWithPhoneNumber from '../view/loginSubpage/loginWithPhoneNumber.vue'
 import LoginWithUsername from "@/view/loginSubpage/loginWithUsername"
 import { generalAlert } from "@/common/function/func"
@@ -55,7 +55,10 @@ export default {
                 SMSCode: "",
                 graVerCode: ""
             },
-            validPhoneNumberFlag1: true
+            validPhoneNumberFlag1: true,
+            // URL
+            LoginWithUsernameURL: "/purchase/login/0",
+            LoginWithPhoneNumberURL: "/purchase/login/1",
         }
     },
     watch: {
@@ -88,12 +91,13 @@ export default {
                 // 这一段是需要的
                 if (this.flag) {
                     // 手机号密码登录
-                    console.log(this.userInfo)
-                    this.$axios.post("/purchase/login/0", {
-                        tel: this.userInfo.phoneNumber,
-                        passwd: this.userInfo.password,
-                        VerificationCode: this.userInfo.graVerCode
-                    })
+                    // console.log(this.userInfo)
+                    let config = {}
+                    config.tel = this.userInfo.phoneNumber
+                    config.passwd = this.userInfo.password
+                    config.VerificationCode = this.userInfo.graVerCode
+                    console.log(config)
+                    this.$post(this.LoginWithUsernameURL, config)
                     .then(res => {
                         if (res.data.status === "success") {
                             console.log("手机号密码登录成功")
@@ -108,14 +112,15 @@ export default {
                         console.log(err)
                         console.log("手机号密码登录请求失败")
                         // 这里需要添加token
-                        this.$router.push({path: "/home"})
+                        //this.$router.push({path: "/home"})
                     })
                 } else {
                     // 手机号验证码登录
-                    this.$axios.post("/purchase/login/1", {
-                        tel: this.userInfo.phoneNumber,
-                        SMSCode: this.userInfo.SMSCode
-                    })
+                    let config = {}
+                    config.tel = this.userInfo.phoneNumber
+                    config.SMSCode = this.userInfo.SMSCode
+                    console.log(config)
+                    this.$post(this.LoginWithPhoneNumberURL, config)
                     .then(res => {
                         if (res.data.status === "success") {
                             console.log("手机号验证码登录成功")

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <x-header>添加合同</x-header>
+        <x-header :left-options="{ preventGoBack: true }" @on-click-back="goBack">添加合同</x-header>
         <div class="context">
             <group>
                 <x-input v-for="(v, k) in title" :title="v" :key="k" v-model="contract[k]"></x-input>
@@ -49,7 +49,8 @@ export default {
                 expiry_time: "合同有效期:",
                 purcha_num: "购买设备数量:",
                 legal_person_phone: "法人联系方式:"
-            }
+            },
+            addContractURL: "/purchase/addContract"
         }
     },
     watch: {},
@@ -58,7 +59,7 @@ export default {
         addContract() {
             console.log(this.contract)
             let config = this.contract
-            this.$axios.post("/purchase/addContract", config)
+            this.$post(this.addContractURL, config)
             .then(res => {
                 let status = res.data.status
                 if (status == "success") {
@@ -78,6 +79,9 @@ export default {
                 console.log(err)
                 console.log("添加合同请求失败！")
             })
+        },
+        goBack() {
+            this.$router.push({ name: "Home", params: { index: 1 } })
         }
     },
     created() {},

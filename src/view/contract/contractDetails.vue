@@ -97,13 +97,14 @@ export default {
                 text: "修改合同",
                 onButtonClick: this.modifyContract
             }],
+            getContractURL: "/purchase/getContract/"
         }
     },
     watch: {},
     computed: {},
     methods: {
         getContractDetails(contractNum) {
-            this.$axios.get("/purchase/getContract/" + contractNum)
+            this.$get(this.getContractURL + contractNum)
             .then(res => {
                 let status = res.data.status
                 if (status == "warn") {

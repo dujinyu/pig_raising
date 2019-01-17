@@ -33,7 +33,8 @@ export default {
                     valid: isUserName.test(value),
                     msg: "用户名格式错误，用户名长度必须大于等于2小于等于5，只能是中文！"
                 }
-            }
+            },
+            modifyUsernameURL: "/purchase/modifyusername"
         }
     },
     watch: {},
@@ -51,7 +52,7 @@ export default {
             let config = {
                 userName: this.username
             }
-            this.$axios.post("/purchase/modifyusername", config)
+            this.$post(this.modifyUsernameURL, config)
             .then(res => {
                 let status = res.data.status
                 if (status == "success") {
